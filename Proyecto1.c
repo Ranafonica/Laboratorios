@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define maxCartas 60
-#define cartasIniciales 3
-#define cartasPartida 15
+#define MAX_CARTAS 60
+#define CARTAS_INICIALES 3
+#define CARTAS_PARTIDA 15
 
 
 struct Guardian {
-	char nombre [20];
+	char nombre [50];
+	char tipo[50];
 	int PV;
 	int PA;
 	int PD;
@@ -24,17 +25,24 @@ struct Cartas {
 	struct Guardian guardianes;
 	int barajaEnJuego;
 };
+ 
+void MenuInicial();
+void CargarGuardianes(struct Guardian cartas[], int*numCartas);
 
-int main (){
+int main(){
 	
-	CargarGuardianes();
+	int numCartas=0;	
+	struct Guardian cartas[MAX_CARTAS];
+	
 	MenuInicial();
+	CargarGuardianes(cartas, &numCartas);
 	
 	int opcion;
 	
 	do {
 		printf ("\nSELECCIONE UNA OPCION: \n");
 		scanf ("%d", &opcion);
+		printf ("HA SELECCIONADO: ");
 		
 		switch (opcion){
 			case 1:	
@@ -52,18 +60,30 @@ int main (){
 		}
 	} while (opcion <=0 || opcion>=5);
 	
-
+	printf("\nCARTAS CARGADAS DESDE ARCHIVO:\n");
+	for (int i = 0; i < numCartas; i++) {
+	    printf("Nombre: %s\n", cartas[i].nombre);
+	    printf("Tipo: %s\n", cartas[i].tipo);
+	    printf("PV: %d\n", cartas[i].PV);
+	    printf("PA: %d\n", cartas[i].PA);
+	    printf("PD: %d\n", cartas[i].PD);
+	    printf("\n");
+	}
 	return 0;
 }
 
-void CargarGuardianes(){
-	FILE *archivo = fopen ("Guardianes.txt", "r");
-	if (archivo = NULL){
-		perror ("*cueck* ERROR AL ABRIR ARCHIVO ;(");
+void CargarGuardianes(struct Guardian cartas[], int*numCartas){
+	FILE *archivo = fopen ("Guardians.txt", "r");
+	if (archivo == NULL){
+		perror ("\n*cueck*\nERROR AL ABRIR EL ARCHIVO TEXTO\n");
 		exit(1);
 	}
+	while (*numCartas < MAX_CARTAS &&
+           fscanf(archivo, "%[^,], %[^,], %d, %d, %d\n", cartas[*numCartas].nombre, cartas[*numCartas].tipo, &cartas[*numCartas].PV, &cartas[*numCartas].PA, &cartas[*numCartas].PD)==5){
+		(*numCartas)++;
+	}
+	fclose(archivo);
 }
-
 
 void MenuInicial(){
 	printf("--------------------[CLASH OF THE GUARDIANS]--------------------\n");
