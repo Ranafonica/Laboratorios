@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define maxCartas 60
+#define cartasIniciales 3
+#define cartasPartida 15
+
 
 struct Guardian {
 	char nombre [20];
@@ -12,49 +16,54 @@ struct Guardian {
 
 struct Player {
 	int Pvida;
-	
+	//struct Cartas barajaJugador[cartasIniciales];
+	int barajaMano;
 };
 
 struct Cartas {
-	
+	struct Guardian guardianes;
+	int barajaEnJuego;
 };
 
 int main (){
 	
+	CargarGuardianes();
 	MenuInicial();
 	
 	int opcion;
 	
-	printf ("\nSELECCIONE UNA OPCION: \n");
-	scanf ("%d", &opcion);
+	do {
+		printf ("\nSELECCIONE UNA OPCION: \n");
+		scanf ("%d", &opcion);
+		
+		switch (opcion){
+			case 1:	
+			printf("OPCION CREAR CARTA\n");
+			break;
+			case 2: 
+			printf("OPCION EMPEZAR JUEGO\n");
+			break;
+			case 3:
+			printf("OPCION HISTORIAL DE PARTIDAS\n");
+			break;
+			case 4:
+			printf("OPCION CERRAR\n");
+			break;
+		}
+	} while (opcion <=0 || opcion>=5);
 	
-	if (opcion == 1){
-		printf("\nOPCION CREAR CARTA\n");
-		//crear carta
-	}
-	else if (opcion == 2){
-		printf("\nOPCION EMPEZAR JUEGO\n");
-		//empezar juego
-	}
-	else if (opcion == 3){
-		printf("\nOPCION HISTORIAL DE PARTIDAS\n");
-		//muestra historial de partidas
-	}
-	else if (opcion == 4){
-		printf("\nOPCION CERRAR\n");
-		//salir del juego
-	}
 
 	return 0;
 }
 
-void CargarGuardianes (){
+void CargarGuardianes(){
 	FILE *archivo = fopen ("Guardianes.txt", "r");
 	if (archivo = NULL){
 		perror ("*cueck* ERROR AL ABRIR ARCHIVO ;(");
 		exit(1);
 	}
 }
+
 
 void MenuInicial(){
 	printf("--------------------[CLASH OF THE GUARDIANS]--------------------\n");
