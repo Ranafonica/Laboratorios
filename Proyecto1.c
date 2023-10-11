@@ -44,6 +44,13 @@ int main() {
     struct Guardian cartas[MAX_CARTAS];
     
     int turno = 1; // 1 para el jugador, 2 para la computadora
+    
+    struct Jugador jugador;
+    struct Jugador computadora;
+    
+    // Los puntos de vida para el jugador y la computadora
+    jugador.puntosVida = 3;
+    computadora.puntosVida = 3;
 
     numCartas = CargarGuardianes(cartas);
 
