@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <windows.h>
 
 #define MAX_CARTAS 60
 #define CARTAS_INICIALES 3
@@ -22,6 +23,12 @@ struct CartasSeleccionadas {
     int barajaEnJuego;
 };
 
+// Estructura del jugador para el sistema de batalla
+struct Jugador {
+    struct CartasSeleccionadas mano[CARTAS_INICIALES];
+    int puntosVida; // Puntos de vida del jugador o la computadora
+};
+
 // Declaración de funciones
 void MenuInicial();
 int CargarGuardianes(struct Guardian cartas[]);
@@ -35,6 +42,8 @@ int main() {
 
     int numCartas = 0;
     struct Guardian cartas[MAX_CARTAS];
+    
+    int turno = 1; // 1 para el jugador, 2 para la computadora
 
     numCartas = CargarGuardianes(cartas);
 
@@ -59,25 +68,48 @@ int main() {
             case 2:
                 printf("OPCION EMPEZAR JUEGO\n");
 
-                // Crear mazos aleatorios para el jugador y la computadora
+                // Crea mazos aleatorios de 15 cartas cada uno, para el jugador y para la computadora respectivamente.
                 CrearMazoAleatorio(cartas, mazoJugador, numCartas, CARTAS_EN_MAZO);
                 CrearMazoAleatorio(cartas, mazoComputadora, numCartas, CARTAS_EN_MAZO);
 
                 // Mostrar el mazo del jugador
-                MostrarMazo(mazoJugador, CARTAS_EN_MAZO, "Tu mazo de 15 cartas:");
+                MostrarMazo(mazoJugador, CARTAS_EN_MAZO, "TU MAZO DE 15 CARTAS ES: \n");
 
                 // Seleccionar 3 cartas del mazo del jugador
                 SeleccionarCartasIniciales(mazoJugador, CARTAS_EN_MAZO, manoJugador, CARTAS_INICIALES);
 
-                // Mostrar el mazo de la computadora
-                MostrarMazo(mazoComputadora, CARTAS_EN_MAZO, "Mazo de la Computadora:");
-
-                // Seleccionar 3 cartas del mazo de la computadora
-                SeleccionarCartasIniciales(mazoComputadora, CARTAS_EN_MAZO, manoComputadora, CARTAS_INICIALES);
-
-                // Mostrar las cartas seleccionadas por el jugador y la computadora
+                // Mostrar las cartas seleccionadas por el jugador
                 MostrarMazo(manoJugador, CARTAS_INICIALES, "Tus cartas seleccionadas:");
-                MostrarMazo(manoComputadora, CARTAS_INICIALES, "Cartas de la Computadora:");
+                
+                printf("ESPERE UN SEGUNDO...\n");
+                Sleep (5000);
+                printf("AHORA SE MOSTRARAN LAS ESCOGIDAS POR LA COMPUTADORA\n");
+				Sleep (5000);
+				
+                // Seleccionar 3 cartas del mazo de la computadora
+                SeleccionarCartasAleatorias(mazoComputadora, CARTAS_EN_MAZO, manoComputadora, CARTAS_INICIALES);
+
+                // Mostrar las cartas seleccionadas por la computadora
+                MostrarMazo(manoComputadora, CARTAS_INICIALES, "CARTAS DE LA COMPUTADORA:");
+                
+                // Aquí comienza el bucle de turnos
+                while (1) {
+                    if (turno == 1) {
+                        // Turno del jugador
+                        printf("TURNO DEL JUGADOR\n");
+                        // Aquí puedes permitir que el jugador realice acciones, como jugar una carta.
+                    } else {
+                        // Turno de la computadora
+                        printf("TURNO DE LA COMPUTADORA\n");
+                        // Implementa la lógica de la computadora para seleccionar y jugar una carta.
+                    }
+
+                    // Actualiza el turno (alternancia entre 1 y 2)
+                    turno = (turno == 1) ? 2 : 1;
+
+                    // Aquí puedes agregar lógica para verificar el final del juego.
+                    // Si se cumple una condición de finalización, rompe el bucle de turnos.
+                }
                 break;
             case 3:
                 printf("OPCION HISTORIAL DE PARTIDAS\n");
@@ -88,8 +120,8 @@ int main() {
         }
     } while (opcion <= 0 || opcion >= 5);
 
-    printf("\nCARTAS CARGADAS DESDE ARCHIVO:\n");
-    MostrarCartas(cartas, numCartas);
+    //printf("\nCARTAS CARGADAS DESDE ARCHIVO:\n");
+    //MostrarCartas(cartas, numCartas);
 
     return 0;
 }
@@ -141,6 +173,17 @@ void CrearMazoAleatorio(struct Guardian cartas[], struct CartasSeleccionadas maz
             cartasDisponibles[j] = cartasDisponibles[j + 1];
         }
         numCartasDisponibles--;
+    }
+}
+
+void SeleccionarCartasAleatorias(struct CartasSeleccionadas mazo[], int numCartasEnMazo, struct CartasSeleccionadas baraja[], int numCartasIniciales) {
+    for (int i = 0; i < numCartasIniciales; i++) {
+        int cartaAleatoria;
+        do {
+            cartaAleatoria = rand() % numCartasEnMazo;
+        } while (mazo[cartaAleatoria].barajaEnJuego == 0);
+
+        baraja[i] = mazo[cartaAleatoria];
     }
 }
 
