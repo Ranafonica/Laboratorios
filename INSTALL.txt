@@ -1,0 +1,7 @@
+Instrucciones para realizar la instalación del programa:
+
+1-Se debe contar con el programa DEV-C++ 5.11.
+2-Debe clonar el repositorio en su computadora.
+3-Debe abrir el archivo "Proyecto1.c" en el DEV-C++.
+4-Debe configurar en "Ejecutar", "Parameters" el archivo con la información de las cartas.
+5-Debe seleccionar la opción Ejecutar y Compilar.
