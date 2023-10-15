@@ -34,6 +34,7 @@ void MenuInicial();
 int CargarGuardianes(struct Guardian cartas[]);
 void CrearMazoAleatorio(struct Guardian cartas[], struct CartasSeleccionadas mazo[], int numCartas, int numCartasEnMazo);
 void SeleccionarCartasIniciales(struct CartasSeleccionadas mazo[], int numCartasEnMazo, struct CartasSeleccionadas baraja[], int numCartasIniciales);
+void BucleTurnos(struct Guardian cartas[], struct CartasSeleccionadas manoJugador[], struct CartasSeleccionadas manoComputadora[], int numCartas, int *jugadorpuntosVida, int *computadorapuntosVida); // Cambio en la firma de la función
 void MostrarCartas(struct Guardian cartas[], int numCartas);
 void MostrarMazo(struct CartasSeleccionadas baraja[], int numCartasIniciales, const char* mensaje);
 
@@ -49,11 +50,13 @@ int main() {
     struct Jugador computadora;
     
     // Los puntos de vida para el jugador y la computadora
+    int jugadorpuntosVida = 3;
+    int computadorapuntosVida = 3;
     jugador.puntosVida = 3;
     computadora.puntosVida = 3;
 
     numCartas = CargarGuardianes(cartas);
-
+ 
     struct CartasSeleccionadas mazoJugador[CARTAS_EN_MAZO];
     struct CartasSeleccionadas mazoComputadora[CARTAS_EN_MAZO];
     struct CartasSeleccionadas manoJugador[CARTAS_INICIALES];
@@ -87,36 +90,25 @@ int main() {
 
                 // Mostrar las cartas seleccionadas por el jugador
                 MostrarMazo(manoJugador, CARTAS_INICIALES, "Tus cartas seleccionadas:");
-                
+
                 printf("ESPERE UN SEGUNDO...\n");
-                Sleep (5000);
+                Sleep(5000);
                 printf("AHORA SE MOSTRARAN LAS ESCOGIDAS POR LA COMPUTADORA\n");
-				Sleep (5000);
-				
+                Sleep(5000);
+
                 // Seleccionar 3 cartas del mazo de la computadora
                 SeleccionarCartasAleatorias(mazoComputadora, CARTAS_EN_MAZO, manoComputadora, CARTAS_INICIALES);
 
                 // Mostrar las cartas seleccionadas por la computadora
                 MostrarMazo(manoComputadora, CARTAS_INICIALES, "CARTAS DE LA COMPUTADORA:");
                 
-                // Aquí comienza el bucle de turnos
-                while (1) {
-                    if (turno == 1) {
-                        // Turno del jugador
-                        printf("TURNO DEL JUGADOR\n");
-                        // Aquí puedes permitir que el jugador realice acciones, como jugar una carta.
-                    } else {
-                        // Turno de la computadora
-                        printf("TURNO DE LA COMPUTADORA\n");
-                        // Implementa la lógica de la computadora para seleccionar y jugar una carta.
-                    }
-
-                    // Actualiza el turno (alternancia entre 1 y 2)
-                    turno = (turno == 1) ? 2 : 1;
-
-                    // Aquí puedes agregar lógica para verificar el final del juego.
-                    // Si se cumple una condición de finalización, rompe el bucle de turnos.
-                }
+                Sleep(5000);
+                printf("LISTO PARA EMPEZAR LA BATALLA?...");
+                Sleep(5000);
+                system ("cls");
+                
+                // Aquí comienza el bucle de turnos:
+                BucleTurnos(cartas, manoJugador, manoComputadora, numCartas, &jugadorpuntosVida, &computadorapuntosVida);
                 break;
             case 3:
                 printf("OPCION HISTORIAL DE PARTIDAS\n");
@@ -126,9 +118,6 @@ int main() {
                 break;
         }
     } while (opcion <= 0 || opcion >= 5);
-
-    //printf("\nCARTAS CARGADAS DESDE ARCHIVO:\n");
-    //MostrarCartas(cartas, numCartas);
 
     return 0;
 }
@@ -230,6 +219,62 @@ void MostrarMazo(struct CartasSeleccionadas baraja[], int numCartasIniciales, co
         printf("PA: %d\n", baraja[i].guardianes.PA);
         printf("PD: %d\n", baraja[i].guardianes.PD);
         printf("\n");
+    }
+}
+
+void BucleTurnos(struct Guardian cartas[], struct CartasSeleccionadas manoJugador[], struct CartasSeleccionadas manoComputadora[], int numCartas, int *jugadorpuntosVida, int *computadorapuntosVida) {
+    int turno = 1;
+    while (*jugadorpuntosVida > 0 && *computadorapuntosVida > 0) {
+        printf("\n[ESTADO ACTUAL DE PARTIDA]\n");
+        printf("VIDAS JUGADOR: %d\n", *jugadorpuntosVida);
+        printf("VIDAS COMPUTADORA: %d\n", *computadorapuntosVida);
+
+        if (turno == 1) {
+            printf("\n[TURNO DEL JUGADOR]\n");
+            MostrarMazo(manoJugador, CARTAS_INICIALES, "Tus cartas seleccionadas:");
+
+            int cartabatalla;
+            do {
+                printf("SELECCIONA UN GUARDIAN PARA LA BATALLA [1-3]: ");
+                scanf("%d", &cartabatalla);
+            } while (cartabatalla < 1 || cartabatalla > 3);
+
+            int dano = manoJugador[cartabatalla - 1].guardianes.PA - manoComputadora[0].guardianes.PD;
+            if (dano <= 0) {
+                dano = 0;
+            }
+            printf("\n%s ATACA A LA COMPUTADORA POR %d PUNTOS DE DANO\n", manoJugador[cartabatalla - 1].guardianes.nombre, dano);
+            *computadorapuntosVida -= dano;
+
+            if (*computadorapuntosVida <= 0) {
+                printf("\n%s HA DERROTADO AL GUARDIAN DE LA COMPUTADORA\n", manoJugador[cartabatalla - 1].guardianes.nombre);
+                break;
+            }
+        } else {
+        	printf("\nESPERE UN SEGUNDO...\n");
+            Sleep(5000);
+            printf("\n[TURNO DE LA COMPUTADORA]: \n");
+            int cartabatalla = rand() % 3;
+            int dano = manoComputadora[cartabatalla].guardianes.PA - manoJugador[0].guardianes.PD;
+
+            if (dano <= 0) {
+                dano = 0;
+            }
+            Sleep(5000);
+            printf("\n%s ATACA AL JUGADOR POR %d PUNTOS DE DANO!\n", manoComputadora[cartabatalla].guardianes.nombre, dano);
+            *jugadorpuntosVida -= dano;
+
+            if (*jugadorpuntosVida <= 0) {
+                printf("%s HA DERROTADO AL GUARDIAN DEL JUGADOR\n", manoComputadora[cartabatalla].guardianes.nombre);
+                break;
+            }
+        }
+        turno = (turno == 1) ? 2 : 1;
+    }
+    if (*jugadorpuntosVida = 0) {
+        printf("\nLA COMPUTADORA HA GANADO LA PARTIDA\n");
+    } else {
+        printf("\nHAS GANADO LA PARTIDA\n");
     }
 }
 
