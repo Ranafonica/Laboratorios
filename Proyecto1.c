@@ -26,7 +26,7 @@ struct CartasSeleccionadas {
 // Estructura del jugador para el sistema de batalla
 struct Jugador {
     struct CartasSeleccionadas mano[CARTAS_INICIALES];
-    int puntosVida; // Puntos de vida del jugador o la computadora
+    int puntosVida;
 };
 
 // Declaración de funciones
@@ -44,7 +44,7 @@ int main() {
     int numCartas = 0;
     struct Guardian cartas[MAX_CARTAS];
     
-    int turno = 1; // 1 para el jugador, 2 para la computadora
+    int turno = 1;
     
     struct Jugador jugador;
     struct Jugador computadora;
@@ -52,6 +52,7 @@ int main() {
     // Los puntos de vida para el jugador y la computadora
     int jugadorpuntosVida = 3;
     int computadorapuntosVida = 3;
+    
     jugador.puntosVida = 3;
     computadora.puntosVida = 3;
 
@@ -63,6 +64,7 @@ int main() {
     struct CartasSeleccionadas manoComputadora[CARTAS_INICIALES];
 
     int opcion;
+    int vercartas;
 
     do {
         MenuInicial();
@@ -77,7 +79,6 @@ int main() {
                 break;
             case 2:
                 printf("OPCION EMPEZAR JUEGO\n");
-
                 // Crea mazos aleatorios de 15 cartas cada uno, para el jugador y para la computadora respectivamente.
                 CrearMazoAleatorio(cartas, mazoJugador, numCartas, CARTAS_EN_MAZO);
                 CrearMazoAleatorio(cartas, mazoComputadora, numCartas, CARTAS_EN_MAZO);
@@ -107,7 +108,7 @@ int main() {
                 Sleep(5000);
                 system ("cls");
                 
-                // Aquí comienza el bucle de turnos:
+                // Es aqui donde comienza el bucle de los turnos del juego
                 BucleTurnos(cartas, manoJugador, manoComputadora, numCartas, &jugadorpuntosVida, &computadorapuntosVida);
                 break;
             case 3:
@@ -115,9 +116,10 @@ int main() {
                 break;
             case 4:
                 printf("OPCION CERRAR\n");
+                printf("GRACIAS POR JUGAR CLASH OF THE GUARDIANS :D\n");
                 break;
         }
-    } while (opcion <= 0 || opcion >= 5);
+    } while (opcion <= 0 || opcion >= 5 || opcion !=4);
 
     return 0;
 }
@@ -190,11 +192,11 @@ void SeleccionarCartasIniciales(struct CartasSeleccionadas mazo[], int numCartas
         do {
             printf("CARTA %d: ", i + 1);
             scanf("%d", &eleccion);
-            eleccion--; // Ajustar a índice base 0
+            eleccion--;
         } while (eleccion < 0 || eleccion >= numCartasEnMazo || mazo[eleccion].barajaEnJuego == 0);
 
         baraja[i] = mazo[eleccion];
-        mazo[eleccion].barajaEnJuego = 0; // Marcar la carta como seleccionada
+        mazo[eleccion].barajaEnJuego = 0;
     }
 }
 
