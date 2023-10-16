@@ -31,6 +31,7 @@ Una vez lista la selección de cartas para ambos jugadores, era turno del bucle 
 Luego si esta variable sobrepasaba los 0 puntos, significaba que había un ataque al jugador directamente, transformándose en -1 punto de vida para el contrincante en cuestión.
 Para el turno de la máquina se usó la misma lógica implementada en el jugador, con la leve diferencia que, con la máquina, se necesitaba de usar un valor aleatorio (un random) que permitiese escoger entre 3 cartas con cual atacar y a que carta rival atacar, para ello se generó la semilla de un random en el int main(), y dentro del cópdigo dl bucle del juego se estableció que la variable cartacomputadora = rand%CartasIniciales, función que permitía acceder a las cartas previamente seleccionadas por la computadora, sin perder un orden lógico en el transcurso del código.
 De esta forma, el bucle permitía que, tras ataque y defensa de las cartas, uno de los 2 jugadores deberá de llegar a 0 en algun turno, y si así fuese, se imprime un breve texto en pantalla que indica si has ganado tu (jugador) o la computadora (el rival).
+[https://drive.google.com/file/d/1-Ai1Oll8KbKfx9cPkGQB86WR1yxJ5--P/view?usp=sharing] Para el link del video.
 [https://github.com/Ranafonica/Laboratorios/tree/master] Para el link GitHub del archivo, @Ranafonica
 
 
