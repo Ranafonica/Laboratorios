@@ -81,11 +81,6 @@ int main (){
 				cout << "Resultado del promedio: " << promedio << endl;
 				cout << "Resultado del producto: " << producto << endl;
 				
-				// Impresion de lista
-				/*for (int i: Listanum) {
-	                    cout << i << " ";
-	                }
-	            cout << endl;*/
 	            break;
 			}
 			case 2:{
@@ -106,7 +101,7 @@ int main (){
 				cout << "Ingrese la cantidad de elementos a calcular en secuencia de Fibonacci: " << endl;
 	            cin >> cantidad;
 	            
-	            cout << "Los numeros de la secuencia Fibonacci son " << cantidad << " elementos: " << endl;
+	            cout << "El resultado de la secuencia Fibonacci de " << cantidad << " elementos es de: " << endl;
 	            cout << Fibonacci(cantidad) << "" << endl; // declaracion de funcion "Fibonacci" anteriormente creada.
 	
 				break;
@@ -117,6 +112,7 @@ int main (){
 				string palabra;
 				
 				cout << "Ingrese una palabra: " << endl;
+				cin.ignore(); // Necesité esta funcion para que una vez ingresada la palabra, esta haga una pequeña pausa.
 				getline(cin, palabra); // la utilicé para leer toda la línea incluyendo los espacios en blanco y almacenarla en la variable "palabra".
 				
 				if (EsPalindrome(palabra, 0, palabra.length() - 1)){
